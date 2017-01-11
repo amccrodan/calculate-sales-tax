@@ -27,10 +27,25 @@ function calculateSalesTax(salesData, taxRates) {
   // if it doesn't exist, create new property in output object
   // if it already exists, calculate tax in province and add to property
   // return object
+  outputObject = {};
+
   for (var i = 0; i < salesData.length; i++) {
     currentEntry = salesData[i];
-    console.log(currentEntry);
+    currentCompany = currentEntry["name"];
+    currentProvince = currentEntry["province"];
+    currentTotalSales = sumSales(currentEntry["sales"]);
+
+    if (outputObject[currentCompany]) {
+      outputObject[currentCompany]["totalSales"] += currentTotalSales;
+      outputObject[currentCompany]["totalTaxes"] += calculateTax(currentTotalSales, taxRates[currentProvince]);
+    } else {
+      outputObject[currentCompany] = {};
+      outputObject[currentCompany]["totalSales"] = currentTotalSales;
+      outputObject[currentCompany]["totalTaxes"] = calculateTax(currentTotalSales, taxRates[currentProvince]);
+    }
   }
+
+  return outputObject;
 }
 
 function sumSales(salesArray) {
@@ -41,4 +56,9 @@ function sumSales(salesArray) {
   return sum;
 }
 
+function calculateTax(dollarAmount, taxRate) {
+  return dollarAmount*taxRate;
+}
+
 var results = calculateSalesTax(companySalesData, salesTaxRates);
+console.log(results);
