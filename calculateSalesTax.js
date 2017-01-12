@@ -49,11 +49,9 @@ function calculateSalesTax(salesData, taxRates) {
 }
 
 function sumSales(salesArray) {
-  var sum = 0;
-  for (var i = 0; i < salesArray.length; i++) {
-    sum += salesArray[i];
-  }
-  return sum;
+  return salesArray.reduce(function(a, b) {
+    return a + b;
+  }, 0);
 }
 
 function calculateTax(dollarAmount, taxRate) {
